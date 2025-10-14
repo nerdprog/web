@@ -1,0 +1,114 @@
+db.php
+
+<?php
+$conn = new mysqli("localhost", "root", "", "student_db");
+?>
+
+
+index.html
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+</head>
+<body ng-controller="Ctrl">
+
+<h3>Simple Student App (CRUD)</h3>
+
+<!-- Add Student -->
+<input ng-model="student.name" placeholder="Name">
+<input ng-model="student.email" placeholder="Email">
+<button ng-click="addStudent()">Add Student</button>
+
+<hr>
+
+<!-- Show Students -->
+<div ng-repeat="s in students">
+  ID: {{s.id}} |
+  <input ng-model="s.name">
+  <input ng-model="s.email">
+  <button ng-click="updateStudent(s)">Update</button>
+  <button ng-click="deleteStudent(s.id)">Delete</button>
+</div>
+
+<script>
+var app = angular.module("app", []);
+app.controller("Ctrl", function($scope, $http){
+  $scope.students = [];
+
+  function load(){
+    $http.get("fetch.php").then(function(res){
+      $scope.students = res.data;
+    });
+  }
+
+  $scope.addStudent = function(){
+    $http.post("insert.php", $scope.student).then(function(){
+      $scope.student = {};
+      load();
+    });
+  };
+
+  $scope.updateStudent = function(s){
+    $http.post("update.php", s).then(load);
+  };
+
+  $scope.deleteStudent = function(id){
+    $http.post("delete.php", { id: id }).then(load);
+  };
+
+  load();
+});
+</script>
+
+</body>
+</html>
+
+
+update.php
+<?php
+include 'db.php';
+
+$data = json_decode(file_get_contents("php://input"));
+$id = $data->id;
+$name = $data->name;
+$email = $data->email;
+
+$conn->query("UPDATE students SET name='$name', email='$email' WHERE id=$id");
+?>
+
+
+fetch.php
+<?php
+include 'db.php';
+$result = $conn->query("SELECT * FROM students");
+$rows = [];
+while($r = $result->fetch_assoc()) $rows[] = $r;
+echo json_encode($rows);
+?>
+
+delete.php
+<?php
+include 'db.php';
+$data = json_decode(file_get_contents("php://input"));
+$id = $data->id;
+$conn->query("DELETE FROM students WHERE id=$id");
+?>
+
+insert.php
+<?php
+include 'db.php';
+
+$data = json_decode(file_get_contents("php://input"));
+$name = $data->name;
+$email = $data->email;
+
+$conn->query("INSERT INTO students (name,email) VALUES ('$name','$email')");
+?>
+
+
+CREATE TABLE students (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100)
+);
