@@ -1,0 +1,47 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+
+driver = webdriver.Chrome()
+
+try:
+    driver.get("http://127.0.0.1:5500/post_request.html")
+
+    driver.maximize_window()
+
+    time.sleep(10)
+    driver.find_element(By.ID,"firstname").send_keys("arun")
+    driver.find_element(By.ID,"lastname").send_keys("kumar")
+    driver.find_element(By.ID,"Add").click()
+    if 'arun' in driver.page_source:
+        print("Testcase Passed successfully")
+finally:
+    time.sleep(5)
+    driver.quit()
+
+
+
+ post_request.html
+
+ <!DOCTYPE html>
+<html>
+<body>
+
+<input id="firstname" placeholder="First name">
+<input id="lastname" placeholder="Last name">
+<button id="Add">Add</button>
+
+<script>
+document.getElementById("Add").onclick = function() {
+    let first = document.getElementById("firstname").value;
+    let last = document.getElementById("lastname").value;
+    
+    // Add the first name to the page so Selenium can find it
+    let p = document.createElement("p");
+    p.textContent = first + " " + last;
+    document.body.appendChild(p);
+};
+</script>
+
+</body>
+</html>
