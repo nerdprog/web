@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Form Validation</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="formCtrl">
+
+  <h2>Simple Form Validation</h2>
+
+  <form name="userForm" ng-submit="submitForm()">
+
+    <!-- Username -->
+    <p>
+      Name: 
+      <input type="text" ng-model="user.name" required>
+    </p>
+
+    <!-- Age -->
+    <p>
+      Age:
+      <input type="number" ng-model="user.age" required>
+    </p>
+
+    <!-- Password -->
+    <p>
+      Password:
+      <input type="password" ng-model="user.password" required>
+    </p>
+
+    <!-- Confirm Password -->
+    <p>
+      Confirm Password:
+      <input type="password" ng-model="user.confirm" required>
+    </p>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <h3>{{message}}</h3>
+
+  <script>
+    var app = angular.module("myApp", []);
+    app.controller("formCtrl", function($scope) {
+      $scope.submitForm = function() {
+        if (!$scope.user.name || !$scope.user.age || !$scope.user.password || !$scope.user.confirm) {
+          $scope.message = " Please fill all fields.";
+        } 
+        else if ($scope.user.age < 18) {
+          $scope.message = " Age must be 18 or above.";
+        } 
+        else if ($scope.user.password !== $scope.user.confirm) {
+          $scope.message = " Passwords do not match.";
+        } 
+        else {
+          $scope.message = " Form submitted successfully!";
+        }
+      };
+    });
+  </script>
+
+</body>
+</html>

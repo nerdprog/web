@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Employees xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="employee.xsd">
+
+    <Employee>
+        <employeeID>E001</employeeID>
+        <name>John Doe</name>
+        <designation>Manager</designation>
+        <salary>50000</salary>
+        <employmentStatus>Active</employmentStatus>
+    </Employee>
+
+    <Employee>
+        <employeeID>E002</employeeID>
+        <name>Jane Smith</name>
+        <designation>Developer</designation>
+        <salary>40000</salary>
+        <employmentStatus>Inactive</employmentStatus>
+    </Employee>
+
+</Employees>
