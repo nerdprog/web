@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="attendanceApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple AngularJS Attendance (Local Only)</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="MainCtrl">
+
+  <h2>Student Attendance (Local Demo)</h2>
+
+  <form ng-submit="addStudent()">
+    <input type="text" ng-model="student.name" placeholder="Name" required>
+    <input type="text" ng-model="student.roll_no" placeholder="Roll No" required>
+
+    <select ng-model="student.status" required>
+      <option value="">Select Status</option>
+      <option value="Present">Present</option>
+      <option value="Absent">Absent</option>
+    </select>
+
+    <button type="submit">Add</button>
+  </form>
+
+  <br>
+  <button ng-click="show='All'">Show All</button>
+  <button ng-click="show='Present'">Show Present</button>
+  <button ng-click="show='Absent'">Show Absent</button>
+
+  <h3>Student List</h3>
+  <div ng-repeat="s in students | filter:{status: show == 'All' ? '' : show}">
+    <p>{{s.name}} - {{s.roll_no}} ({{s.status}})
+      <button ng-click="deleteStudent($index)">❌</button>
+    </p>
+  </div>
+
+  <script>
+    var app = angular.module('attendanceApp', []);
+
+    app.controller('MainCtrl', function($scope) {
+      $scope.students = [];
+     
+
+      $scope.addStudent = function() {
+        $scope.students.push({
+          name: $scope.student.name,
+          roll_no: $scope.student.roll_no,
+          status: $scope.student.status
+        });
+        $scope.student = {}; // clear input
+      };
+
+      $scope.deleteStudent = function(index) {
+        $scope.students.splice(index, 1);
+      };
+    });
+  </script>
+
+</body>
+</html>
