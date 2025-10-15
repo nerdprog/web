@@ -82,8 +82,8 @@ fetch.php
 <?php
 include 'db.php';
 $result = $conn->query("SELECT * FROM students");
-$rows = [];
-while($r = $result->fetch_assoc()) $rows[] = $r;
+// Fetch all results into an associative array at once
+$rows = $result->fetch_all(MYSQLI_ASSOC);
 echo json_encode($rows);
 ?>
 
@@ -111,4 +111,5 @@ CREATE TABLE students (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100),
   email VARCHAR(100)
+
 );
